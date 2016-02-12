@@ -31,13 +31,13 @@ var defaults = {
 };
 
 function response({
-	foo,
+	foo = defaults.foo,
 	bar = defaults.bar,
 	baz,
 	bam: {
-		qux,
+		qux = defaults.bam.qux,
 		qam = defaults.bam.qam
-	}
+	} = {}
 } = {}) {
 
 
