@@ -4,13 +4,22 @@ function upper(strings,...values) {
 	strings.forEach((segment, index) => {
 		if(index > 0) {
 			let value = values[index - 1];
-			str += value.charAt(0).toUpperCase() + value.slice(1);
+			str += capitalize(value);
 		}
 		str += segment;
 	});
 
 	return str;
 }
+
+const capitalize = (string) => {
+	const words = string.split(' ');
+	const capitalizedWords = words.map((word) => {
+		return word.charAt(0).toUpperCase() + word.slice(1);
+	});
+
+	return capitalizedWords.join(' ');
+};
 
 var name = "kyle",
 	twitter = "getify",
