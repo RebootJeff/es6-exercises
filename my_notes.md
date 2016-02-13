@@ -343,7 +343,96 @@ let msg = myTag`Hello, ${ `${name}` }.
   Aaaand this is on a new line.`;
 ```
 
+## Symbols
+
+Symbols are always unique. They kinda create ability to have private props; good for meta-programming so then other devs can't overwrite your prop or whatever.
+
+```javascript
+let sym = Symbol('hello');
+let obj = {
+  [sym]: 'jeff'
+};
+
+obj[Symbol('hello')]; // undefined
+obj[sym]; // 'jeff'
+
+Object.keys(obj); // won't reveal the key for 'jeff' val
+// need to use a new Object method to see symbol props.
+```
+
+There are Well Known Symbols (WKS) such as `Symbol.iterator`.
+
+Symbols aren't going to be useful for day-to-day programming, but they will be used for meta-programming.
+
+## Iterators
+
+```javascript
+let a = [1, 2];
+let myIterator = a[Symbol.iterator]();
+
+myIterator.next(); // { value: 1, done: false }
+myIterator.next(); // { value: 2, done: false }
+myIterator.next(); // { undefined, done: true }
+```
+
+Iterators abstract away the process for getting data out of data structures. Strings, arrays, maps, etc. are iterables. But POJOs are *not*.
+
+Let's create an iterator to iterate over a POJO.
+
+```javascript
+// even numbers from 0 to 10
+let Evens = {
+  [Symbol.iterator]: () => {
+    var val = 0;
+    let myIterator = {
+      next() {
+        return {
+          value: val,
+          done: (val >= 10)
+        }
+      }
+    };
+
+    return myIterator;
+  }
+};
+
+for(let val of Evens) {
+  console.log(val);
+}
+```
+
 ## Generators
+
+Simpler to make than iterators. Generators are controlled iterators.
+
+```javascript
+function* odds() {
+  yield 1;
+  yield 3;
+  yield 5;
+  yield 7;
+  yield 9;
+}
+
+for(let val of odds()) {
+  console.log(val);
+}
+```
+
+```javascript
+var Evens = {
+  *[Symbol.iterator]() {
+    for(var i = 0; i <= 10; i += 2) {
+      yield i;
+    }
+  }
+};
+
+for(let val of Evens) {
+  console.log(val);
+}
+```
 
 As methods:
 ```javascript
@@ -373,7 +462,9 @@ let obj = {
   foo(1, 2, 3);
   ```
 - Kyle didn't use slides, he used live coding like a professor writing on a chalkboard. Sadly, like a prof w/ a chalkboard, he would occasionally delete everything in his text editor to clear things out. I would argue he should just let the live coding file grow so people who are a bit behind can still take notes about stuff he wrote minutes before the deletion.
-- Why are custom getters/setters in object literals going to be more common in ES6 than ES5.
+- Why are custom getters/setters in object literals going to be more common in ES6 than ES5? --> For adding intermediate custom logic. E.g., setter that only allows the prop to be a number less than 100.
+- "A generator is an iterator that controls its value" (paraphrased) is a confusing thing to hear. Kyle will say things like this in passing.
+- Later parts felt more complex, but we didn't have enough time for more explanation. E.g., symbols, iterators, generators seem weird to me. And it's not clear how they're useful or better than ES5 alternatives. This really sucks because I hear a lot of hype around generators, but this workshop won't give me much expertise there.
 
 asdf
 
